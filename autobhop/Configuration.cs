@@ -1,28 +1,15 @@
 using Dalamud.Configuration;
-using Dalamud.Plugin;
-using System;
 
-namespace autobhop
+namespace AutoBhop;
+
+[Serializable]
+public sealed class Configuration : IPluginConfiguration
 {
-    [Serializable]
-    public class Configuration : IPluginConfiguration
-    {
-        public int Version { get; set; } = 0;
+    public int Version { get; set; } = 1;
 
-        public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
-
-        // the below exist just to make saving less cumbersome
-        [NonSerialized]
-        private IDalamudPluginInterface? PluginInterface;
-
-        public void Initialize(IDalamudPluginInterface pluginInterface)
-        {
-            this.PluginInterface = pluginInterface;
-        }
-
-        public void Save()
-        {
-            this.PluginInterface!.SavePluginConfig(this);
-        }
-    }
+    /// <summary>
+    /// Holding the key is already opt in, so this defaults to on. It exists for the
+    /// times you want the key back without unloading the plugin.
+    /// </summary>
+    public bool Enabled { get; set; } = true;
 }

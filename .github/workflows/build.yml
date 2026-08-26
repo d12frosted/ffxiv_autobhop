@@ -1,0 +1,35 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Fetch Dalamud
+        run: |
+          mkdir -p "$HOME/dalamud"
+          curl -sSLf https://goatcorp.github.io/dalamud-distrib/latest.zip -o /tmp/dalamud.zip
+          unzip -q /tmp/dalamud.zip -d "$HOME/dalamud"
+          echo "DALAMUD_HOME=$HOME/dalamud" >> "$GITHUB_ENV"
+
+      # The decision logic is plain .NET, so it is tested on its own before anything
+      # that needs a game install is built.
+      - name: Test
+        run: dotnet test autobhop.Tests/autobhop.Tests.csproj -c Release --nologo
+
+      - name: Build
+        run: dotnet build autobhop/autobhop.csproj -c Release --nologo
+
+      - name: Check pluginmaster.json is current
+        run: ./scripts/pluginmaster.py --check

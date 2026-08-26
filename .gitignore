@@ -1,4 +1,7 @@
-.vs/
-obj/
 bin/
+obj/
+dist/
+.vs/
+.idea/
 *.user
+.DS_Store

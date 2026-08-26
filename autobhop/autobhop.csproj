@@ -1,19 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="Dalamud.Plugin.Bootstrap.targets" />
 
   <PropertyGroup>
-    <Version>1.0.0.1</Version>
-    <Description>Auto bunnyhop plugin for FFXIV.</Description>
-    <PackageProjectUrl>https://github.com/goatcorp/SamplePlugin</PackageProjectUrl>
-    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <IsPackable>false</IsPackable>
-    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Required to build a windows-targeted assembly from macOS or Linux. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Pinned so building the project and building the solution land in the same place. -->
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <UsesDalamud>true</UsesDalamud>
+    <!-- Dalamud loads the assembly by InternalName, so this has to stay lowercase. -->
+    <AssemblyName>autobhop</AssemblyName>
+    <RootNamespace>AutoBhop</RootNamespace>
+    <Version>1.1.0.0</Version>
   </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
+    <ProjectReference Include="..\autobhop.Core\autobhop.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Update="DalamudPackager" Version="2.1.13" />
+    <!-- Dalamud needs the manifest sitting beside the assembly it loads. -->
+    <None Include="$(MSBuildProjectName).json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Dalamud">
+      <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="FFXIVClientStructs">
+      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- The pointer types ClientStructs hands back live here. -->
+    <Reference Include="InteropGenerator.Runtime">
+      <HintPath>$(DalamudLibPath)InteropGenerator.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
 </Project>

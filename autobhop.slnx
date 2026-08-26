@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="autobhop.Core/autobhop.Core.csproj" />
+  <Project Path="autobhop.Tests/autobhop.Tests.csproj" />
+  <Project Path="autobhop/autobhop.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>

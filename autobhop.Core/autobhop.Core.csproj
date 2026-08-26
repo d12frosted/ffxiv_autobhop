@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    No Dalamud and no game types here on purpose. The only thing this plugin really
+    decides is "may I jump this frame", and that decision is a handful of booleans,
+    so it lives somewhere it can be tested without a running client.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>autobhop.Core</AssemblyName>
+    <RootNamespace>AutoBhop.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

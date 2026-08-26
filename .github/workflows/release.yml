@@ -1,0 +1,48 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Fetch Dalamud
+        run: |
+          mkdir -p "$HOME/dalamud"
+          curl -sSLf https://goatcorp.github.io/dalamud-distrib/latest.zip -o /tmp/dalamud.zip
+          unzip -q /tmp/dalamud.zip -d "$HOME/dalamud"
+          echo "DALAMUD_HOME=$HOME/dalamud" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: dotnet test autobhop.Tests/autobhop.Tests.csproj -c Release --nologo
+
+      - name: Build
+        run: dotnet build autobhop/autobhop.csproj -c Release --nologo
+
+      # Dalamud extracts this next to the plugin and loads InternalName.dll, so the
+      # assembly and its manifest have to sit at the root of the zip.
+      - name: Package
+        run: |
+          mkdir -p dist
+          cd autobhop/bin/Release
+          zip -j "$GITHUB_WORKSPACE/dist/autobhop.zip" \
+            autobhop.dll autobhop.Core.dll autobhop.json
+
+      # pluginmaster.json points at releases/latest/download, so publishing this asset
+      # is the whole of "shipping an update".
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/autobhop.zip
+          generate_release_notes: true

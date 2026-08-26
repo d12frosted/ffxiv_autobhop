@@ -1,4 +1,5 @@
-{
+[
+  {
     "Author": "spooee, d12frosted",
     "Name": "autobhop",
     "InternalName": "autobhop",
@@ -14,8 +15,16 @@
     "LoadPriority": 0,
     "AcceptsFeedback": false,
     "Tags": [
-        "jump",
-        "bunnyhop",
-        "movement"
-    ]
-}
+      "jump",
+      "bunnyhop",
+      "movement"
+    ],
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "DownloadLinkInstall": "https://github.com/d12frosted/ffxiv_autobhop/releases/latest/download/autobhop.zip",
+    "DownloadLinkUpdate": "https://github.com/d12frosted/ffxiv_autobhop/releases/latest/download/autobhop.zip",
+    "DownloadLinkTesting": "https://github.com/d12frosted/ffxiv_autobhop/releases/latest/download/autobhop.zip",
+    "DownloadCount": 0,
+    "LastUpdate": 1787726562
+  }
+]
