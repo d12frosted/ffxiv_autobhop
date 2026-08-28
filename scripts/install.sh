@@ -66,10 +66,17 @@ BACKUP="$XOM_ROOT/dalamudConfig.json.autobhop-backup"
 # / is mounted as Z: inside the wine prefix the game runs in
 windows_path() { printf 'Z:%s' "$(printf '%s' "$1" | tr '/' '\\')"; }
 
+# Dalamud's crash handler carries the game's own path in its command line, and it
+# outlives the game often enough that matching the path alone reports a game that
+# quit hours ago. Match the game process itself.
+game_running() {
+    pgrep -fl "ffxiv_dx11" 2>/dev/null | grep -vi "DalamudCrashHandler" | grep -q .
+}
+
 # Dalamud holds its configuration in memory and writes the whole file out when the
 # game exits, so anything edited underneath a running game is thrown away.
 assert_game_stopped() {
-    if pgrep -f "ffxiv_dx11" >/dev/null 2>&1; then
+    if game_running; then
         [ "$FORCE" -eq 1 ] || die "FFXIV looks like it is running - quit the game first (or pass --force)"
         info "warning: FFXIV appears to be running, dalamud will overwrite this on exit"
     fi
